@@ -1,11 +1,14 @@
-import Home from "./domains/home/Home"
+import "./shared/styles/index.css";
+import Home from "./domains/home/Home";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import { ConfigProvider } from "antd";
 
 function App() {
   return (
-    <>
-      <Home></Home>
-    </>
-  )
+    <ConfigProvider>
+      <RouterProvider router={createBrowserRouter(routes)} />
+    </ConfigProvider>
+  );
 }
 
-export default App
+export default App;

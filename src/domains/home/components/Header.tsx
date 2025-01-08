@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { useState } from "react";
+import { Sparkles } from "lucide-react";
 
 interface HeaderProps {
-  onSearch: (query: string) => void
+  onSearch: (query: string) => void;
 }
 
 export default function Header({ onSearch }: HeaderProps) {
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSearch(searchTerm)
-  }
+    e.preventDefault();
+    onSearch(searchTerm);
+  };
 
   return (
     <header className="bg-gradient-to-r from-red-600 to-yellow-500 p-4 shadow-lg">
@@ -31,13 +31,15 @@ export default function Header({ onSearch }: HeaderProps) {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full sm:w-64 px-4 py-2 rounded-l-full focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
-            <button type="submit" className="bg-yellow-400 text-red-600 px-6 py-2 rounded-r-full hover:bg-yellow-300 transition-colors duration-300">
+            <button
+              type="submit"
+              className="bg-yellow-400 text-red-600 px-6 py-2 rounded-r-full hover:bg-yellow-300 transition-colors duration-300"
+            >
               搜索
             </button>
           </div>
         </form>
       </div>
     </header>
-  )
+  );
 }
-

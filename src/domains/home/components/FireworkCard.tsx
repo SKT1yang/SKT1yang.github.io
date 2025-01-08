@@ -1,20 +1,38 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { useState } from "react";
+import { Sparkles } from "lucide-react";
+import type { Firework } from "../types";
+import {
+  useCartFireworksDispatch,
+  useCartFireworks,
+} from "../../cart/views/CartContext";
 
-interface FireworkCardProps {
-  id: number
-  name: string
-  price: number
-  description: string
-  imageUrl: string
-  thumb: string
-  category: string
-}
+type FireworkCardProps = {
+  firework: Firework;
+};
 
-export default function FireworkCard({ id, name, description, imageUrl, category, thumb }: FireworkCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+export default function FireworkCard({ firework }: FireworkCardProps) {
+  const { id, name, category, description, thumb, imageUrl } = firework;
+  const cartDispatch = useCartFireworksDispatch();
+  const cartFireworks = useCartFireworks();
+  let quantity = cartFireworks[id]?.quantity;
+
+  const addToCart = () => {
+    cartDispatch({
+      type: "add",
+      firework,
+    });
+  };
+
+  const deleteFromCart = () => {
+    cartDispatch({
+      type: "delete",
+      id: firework.id,
+    });
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -32,20 +50,35 @@ export default function FireworkCard({ id, name, description, imageUrl, category
         </div>
         <div className="p-4">
           <h3 className="font-bold text-lg mb-2 text-red-600">{name}</h3>
-          <p className="text-gray-600 text-sm mb-2 line-clamp-2">{description}</p>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="festive-button text-sm flex items-center"
-          >
-            <Sparkles className="mr-1" size={16} />
-            查看详情
-          </button>
+          <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+            {description}
+          </p>
+          <div className="flex justify-between">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="festive-button text-sm flex items-center"
+            >
+              <Sparkles className="mr-1" size={16} />
+              查看详情
+            </button>
+            <div className="cursor-pointer flex items-center">
+              <div onClick={() => deleteFromCart()}>-</div>
+              <div className="inline-block">{quantity}</div>
+              <div onClick={() => addToCart()}>+</div>
+            </div>
+          </div>
         </div>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setIsModalOpen(false)}>
-          <div className="bg-white p-6 rounded-lg max-w-3xl max-h-[90vh] overflow-auto firework-animation" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-white p-6 rounded-lg max-w-3xl max-h-[90vh] overflow-auto firework-animation"
+            onClick={(e) => e.stopPropagation()}
+          >
             <img
               src={imageUrl}
               alt={name}
@@ -66,6 +99,5 @@ export default function FireworkCard({ id, name, description, imageUrl, category
         </div>
       )}
     </>
-  )
+  );
 }
-
